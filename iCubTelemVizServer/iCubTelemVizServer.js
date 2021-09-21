@@ -146,13 +146,13 @@ portRPCserver4sysCmds.onRead(function (cmdNparams) {
 });
 
 // Start history and realtime servers
-app.listen(portTelemetryRespOrigin, function () {
+const telemServer = app.listen(portTelemetryRespOrigin, function () {
     console.log('ICubTelemetry History hosted at http://localhost:' + portTelemetryRespOrigin + '/history');
     console.log('ICubTelemetry Realtime hosted at ws://localhost:' + portTelemetryRespOrigin + '/realtime');
 });
 
 // start the server!
-http.listen(3000, function(){
+const consoleServer = http.listen(3000, function(){
   console.log('listening on http://localhost:3000');
 });
 
@@ -162,3 +162,27 @@ var openMctServerHandler = new OpenMctServerHandler(console.log);
 var ret = openMctServerHandler.start();
 console.log(ret.status);
 console.log(ret.message);
+
+function closeServers(signal) {
+    console.log('Received '+'SIGINT'+' ...');
+    telemServer.close(() => {
+        console.log('iCub Telemetry Server Process terminated')
+    })
+    consoleServer.close(() => {
+        console.log('Control Console Server Process terminated')
+    })
+    openMctServerHandler.stop();
+    process.exit(2);
+}
+
+process.stdin.resume();
+
+process.on('SIGINT', closeServers);
+process.on('SIGTERM', closeServers);
+process.on('SIGQUIT', closeServers);
+process.on('SIGABRT', closeServers);
+
+console.log(process.pid);
+console.log('Is the process.stdin a tty.ReadStream instance currently configured to operate as a raw device? '+process.stdin.isRaw+'!');
+
+process.abort();
