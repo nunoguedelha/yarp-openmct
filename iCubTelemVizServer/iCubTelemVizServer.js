@@ -164,7 +164,7 @@ console.log(ret.status);
 console.log(ret.message);
 
 function closeServers(signal) {
-    console.log('Received '+'SIGINT'+' ...');
+    console.log('Received '+signal+' ...');
     telemServer.close(() => {
         console.log('iCub Telemetry Server Process terminated')
     })
@@ -172,17 +172,13 @@ function closeServers(signal) {
         console.log('Control Console Server Process terminated')
     })
     openMctServerHandler.stop();
-    process.exit(2);
 }
 
 process.stdin.resume();
 
-process.on('SIGINT', closeServers);
-process.on('SIGTERM', closeServers);
-process.on('SIGQUIT', closeServers);
-process.on('SIGABRT', closeServers);
+// process.on('SIGINT', closeServers);
+// process.on('SIGTERM', closeServers);
+// process.on('SIGQUIT', closeServers);
 
 console.log(process.pid);
 console.log('Is the process.stdin a tty.ReadStream instance currently configured to operate as a raw device? '+process.stdin.isRaw+'!');
-
-process.abort();

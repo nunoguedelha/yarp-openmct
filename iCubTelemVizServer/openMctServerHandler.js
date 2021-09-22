@@ -73,8 +73,13 @@ OpenMctServerHandler.prototype.start = function () {
 }
 
 OpenMctServerHandler.prototype.stop = function () {
-    this.processHandle.kill();
-    return {status: 'PROMISE', message: 'Opem-MCT static server process stopping...'};
+    if (this.processHandle) {
+        this.processHandle.kill();
+        console.info('[INFO] Process OpenMCT Server stopping...');
+    } else {
+        console.warn('[WARNING] No process OpenMCT Server running...');
+    }
+    return {status: 'OK', msg: ''};
 }
 
 OpenMctServerHandler.prototype.isOn = function () {
