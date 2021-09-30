@@ -75,11 +75,10 @@ OpenMctServerHandler.prototype.start = function () {
 OpenMctServerHandler.prototype.stop = function () {
     if (this.processHandle) {
         this.processHandle.kill();
-        console.info('[INFO] Process OpenMCT Server stopping...');
+        return {status: 'WRPLY', message: 'Process OpenMCT Server stopping...'};
     } else {
-        console.warn('[WARNING] No process OpenMCT Server running...');
+        return {status: 'WARNING', message: 'No process OpenMCT Server running...'};
     }
-    return {status: 'OK', msg: ''};
 }
 
 OpenMctServerHandler.prototype.isOn = function () {
