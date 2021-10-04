@@ -17,3 +17,5 @@ var port = process.env.PORT || 8080
 app.listen(port, function () {
     console.log('iCub Telemetry Visualizer (Open MCT based) hosted at http://localhost:' + port);
 });
+
+// process.prependListener('SIGTERM', () => {console.log('Received ','SIGTERM');});

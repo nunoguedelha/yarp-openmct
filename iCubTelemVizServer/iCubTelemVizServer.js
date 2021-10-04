@@ -1,5 +1,13 @@
 // Server http (non secure)
 
+// Process the termination signals callbacks.
+// When the signal comes from the terminal, the generated event doesn't have a 'signal' parameter,
+// so it appears undefined in the callback body. We worked around this issue by explicitly setting
+// the 'signal' parameter case by case.
+process.on('SIGQUIT', () => {closeServers('SIGQUIT');});
+process.once('SIGTERM', () => {closeServers('SIGTERM');});
+process.once('SIGINT', () => {closeServers('SIGINT');});
+
 // require and setup basic http functionalities
 var portTelemetryReqOrigin = process.env.PORT_TLM_REQ_ORIGIN || 8080
 var portTelemetryRespOrigin = process.env.PORT_TLM_RSP_ORIGIN || 8081
@@ -173,12 +181,3 @@ function closeServers(signal) {
     })
     openMctServerHandler.stop();
 }
-
-process.stdin.resume();
-
-// process.on('SIGINT', closeServers);
-// process.on('SIGTERM', closeServers);
-// process.on('SIGQUIT', closeServers);
-
-console.log(process.pid);
-console.log('Is the process.stdin a tty.ReadStream instance currently configured to operate as a raw device? '+process.stdin.isRaw+'!');
