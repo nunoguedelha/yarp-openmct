@@ -75,6 +75,7 @@ var portInConfig = {
 };
 
 // Open the ports, register read callback functions, connect the ports
+var disconnectYarp = [];
 Object.keys(portInConfig).forEach(function (id) {
     var portIn = yarp.portHandler.open(portInConfig[id]["localName"],portInConfig[id]["portType"]);
     switch (portInConfig[id]["portType"]) {
@@ -91,6 +92,7 @@ Object.keys(portInConfig).forEach(function (id) {
         default:
     }
     yarp.Network.connect(portInConfig[id]["yarpName"],portInConfig[id]["localName"]);
+    disconnectYarp.push(() => yarp.Network.disconnect(portInConfig[id]["yarpName"],portInConfig[id]["localName"]));
 });
 
 // Create RPC server for executing system commands
@@ -187,4 +189,5 @@ function handleTermination(signal) {
         console.log('Control Console Server closed. No further incoming requests accepted.');
     })
     consoleServerTracker.closeAll();
+    disconnectYarp.forEach((f) => f());
 }
