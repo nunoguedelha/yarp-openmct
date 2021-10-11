@@ -159,14 +159,15 @@ const telemServer = app.listen(portTelemetryRespOrigin, function () {
     console.log('ICubTelemetry Realtime hosted at ws://localhost:' + portTelemetryRespOrigin + '/realtime');
 });
 
-// Track the connections
-WebsocketTracker = require('./websocket-tracker');
-var connTracker = new WebsocketTracker(telemServer);
-
-// start the server!
+// start the control console server!
 const consoleServer = http.listen(3000, function(){
   console.log('listening on http://localhost:3000');
 });
+
+// Track the connections
+WebsocketTracker = require('./websocket-tracker');
+var telemServerTracker = new WebsocketTracker(telemServer);
+var consoleServerTracker = new WebsocketTracker(consoleServer);
 
 // Create and start the OpenMCT server
 var OpenMctServerHandler = require('./openMctServerHandler');
@@ -181,8 +182,9 @@ function handleTermination(signal) {
     telemServer.close(() => {
         console.log('iCub Telemetry Server closed. No further incoming requests accepted.');
     });
-    connTracker.closeAll();
-    // consoleServer.close(() => {
-    //     console.log('Control Console Server closed. No further incoming requests accepted.');
-    // })
+    telemServerTracker.closeAll();
+    consoleServer.close(() => {
+        console.log('Control Console Server closed. No further incoming requests accepted.');
+    })
+    consoleServerTracker.closeAll();
 }

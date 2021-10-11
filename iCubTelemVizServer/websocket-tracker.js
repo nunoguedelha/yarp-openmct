@@ -13,7 +13,7 @@ function WebsocketTracker(server) {
 
 WebsocketTracker.prototype.closeAll = function() {
     this.sockets.forEach((value,key) => {
-        key.close();
+        key.destroy();
     });
 }
 
