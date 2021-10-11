@@ -178,7 +178,7 @@ console.log(ret.message);
 
 function handleTermination(signal) {
     console.log('Received '+signal+' ...');
-    // openMctServerHandler.stop();
+    openMctServerHandler.stop();
     telemServer.close(() => {
         console.log('iCub Telemetry Server closed. No further incoming requests accepted.');
     });
