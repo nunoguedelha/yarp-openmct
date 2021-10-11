@@ -4,9 +4,9 @@
 // When the signal comes from the terminal, the generated event doesn't have a 'signal' parameter,
 // so it appears undefined in the callback body. We worked around this issue by explicitly setting
 // the 'signal' parameter case by case.
-process.on('SIGQUIT', () => {closeServers('SIGQUIT');});
-process.once('SIGTERM', () => {closeServers('SIGTERM');});
-process.once('SIGINT', () => {closeServers('SIGINT');});
+process.once('SIGQUIT', () => {handleTermination('SIGQUIT');});
+process.once('SIGTERM', () => {handleTermination('SIGTERM');});
+process.once('SIGINT', () => {handleTermination('SIGINT');});
 
 // require and setup basic http functionalities
 var portTelemetryReqOrigin = process.env.PORT_TLM_REQ_ORIGIN || 8080
@@ -171,13 +171,13 @@ var ret = openMctServerHandler.start();
 console.log(ret.status);
 console.log(ret.message);
 
-function closeServers(signal) {
+function handleTermination(signal) {
     console.log('Received '+signal+' ...');
+    // openMctServerHandler.stop();
     telemServer.close(() => {
-        console.log('iCub Telemetry Server Process terminated')
+        console.log('iCub Telemetry Server closed. No further incoming requests accepted.');
     })
-    consoleServer.close(() => {
-        console.log('Control Console Server Process terminated')
-    })
-    openMctServerHandler.stop();
+    // consoleServer.close(() => {
+    //     console.log('Control Console Server closed. No further incoming requests accepted.');
+    // })
 }
