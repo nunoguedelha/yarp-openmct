@@ -181,13 +181,39 @@ console.log(ret.message);
 function handleTermination(signal) {
     console.log('Received '+signal+' ...');
     openMctServerHandler.stop();
-    telemServer.close(() => {
-        console.log('iCub Telemetry Server closed. No further incoming requests accepted.');
+    const closeTelemServerPromise = new Promise(function(resolve,reject) {
+        telemServer.close((error) => {
+            if (error === undefined) {
+                resolve('iCub Telemetry Server: all sockets closed.');
+            } else {
+                reject(error);
+            }
+        });
+        console.log('iCub Telemetry Server closed. No further connection requests accepted.');
+        telemServerTracker.closeAll();
     });
-    telemServerTracker.closeAll();
-    consoleServer.close(() => {
+    const closeConsoleServerPromise = new Promise(function(resolve,reject) {
+        consoleServer.close((error) => {
+            if (error === undefined) {
+                resolve('Control Console Server: all sockets closed.');
+            } else {
+                reject(error);
+            }
+        });
         console.log('Control Console Server closed. No further incoming requests accepted.');
-    })
-    consoleServerTracker.closeAll();
-    disconnectYarp.forEach((f) => f());
+        consoleServerTracker.closeAll();
+        disconnectYarp.forEach((f) => f());
+    });
+    Promise.all([closeTelemServerPromise,closeConsoleServerPromise]).then(
+        function(values) {
+            values.forEach((v) => console.log(v));
+            process.exit();
+        },
+        function(error) {
+            console.log(error);
+            process.exit();
+        }
+    )
 }
+
+// process.removeListener()
