@@ -51,7 +51,7 @@ OpenMctServerHandler.prototype.start = function () {
 
     // Start the process
     const wPath = path.join(process.cwd(), '..', 'openmctStaticServer');
-    let npmStart = this.childProcess.spawn('sh', ['runModule.sh'], {shell: 'bash', cwd: wPath, stdio: ['pipe','pipe','pipe','ipc']});
+    const npmStart = this.childProcess.spawn('sh', ['runModule.sh'], {shell: 'bash', cwd: wPath, stdio: ['pipe','pipe','pipe','ipc']});
 
     // Set the output callbacks
     npmStart.stdout.on('data', function (data) {
