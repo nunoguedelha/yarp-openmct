@@ -180,7 +180,7 @@ console.log(ret.message);
 
 function handleTermination(signal) {
     console.log('Received '+signal+' ...');
-    openMctServerHandler.stop();
+    openMctServerHandler.stop(signal);
     const closeTelemServerPromise = new Promise(function(resolve,reject) {
         telemServer.close((error) => {
             if (error === undefined) {
