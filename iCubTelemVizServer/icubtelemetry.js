@@ -20,6 +20,8 @@ const TEN_MS_REPEAT_INTERVAL = 10;
 function ICubTelemetry() {
     this.state = {
         "sens.imu": {
+          "nbframe": 0,
+          "timestamp": 0,
           "ori": {"roll": 0, "pitch": 0, "yaw": 0},
           "acc": {"x": 0, "y": 0, "z": 0},
           "gyr": {"x": 0, "y": 0, "z": 0},
@@ -118,9 +120,11 @@ ICubTelemetry.prototype.flatten = function (nestedObj) {
   return this.flattenHelper(nestedObj,'');
 }
 
-ICubTelemetry.prototype.updateState = function (id,sensorSample) {
+ICubTelemetry.prototype.updateState = function (id,sensorSample,envelope) {
     switch(id) {
         case "sens.imu":
+            this.state[id].nbframe = envelope.getCount();
+            this.state[id].timestamp = envelop.getTime();
             this.state[id].ori.roll = sensorSample[0];
             this.state[id].ori.pitch = sensorSample[1];
             this.state[id].ori.yaw = sensorSample[2];

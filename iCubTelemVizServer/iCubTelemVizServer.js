@@ -86,7 +86,7 @@ Object.keys(portInConfig).forEach(function (id) {
     switch (portInConfig[id]["portType"]) {
         case 'bottle':
             portIn.onRead(function (bottle){
-                icubtelemetry.forwardYarpDataToNotifier[id](id,bottle.toArray());
+                icubtelemetry.forwardYarpDataToNotifier[id](id,bottle.toArray(),0); // port_imu_in.getEnvelope());
             });
             break;
         case 'image':
