@@ -1,0 +1,15 @@
+PID 61103 received SIGSEGV for address: 0x1ca4be280
+0   segfault-handler.node               0x00000001015d40b0 _ZL16segfault_handleriP9__siginfoPv + 304
+1   libsystem_platform.dylib            0x00007fff6d0685fd _sigtramp + 29
+2   ???                                 0x00000001030288c8 0x0 + 4345465032
+3   libYARP_os.3.4.3.dylib              0x0000000153392252 _ZNK4yarp2os6Bottle8toStringEv + 18
+4   YarpJS.node                         0x00000001059120f2 _ZN26YarpJS_BufferedPort_Bottle16_callback_onReadERNSt3__16vectorIN2v85LocalINS2_5ValueEEENS0_9allocatorIS5_EEEE + 50
+5   YarpJS.node                         0x0000000105914a9a _ZN15YarpJS_CallbackI19YarpJS_BufferedPortIN4yarp2os6BottleEEE20_internal_worker_endEP9uv_work_si + 90
+6   node                                0x0000000100768f02 uv__work_done + 175
+7   node                                0x000000010076a9f4 uv__async_event + 65
+8   node                                0x000000010076ab77 uv__async_io + 136
+9   node                                0x0000000100778f96 uv__io_poll + 1554
+10  node                                0x000000010076b02b uv_run + 321
+11  node                                0x000000010064825c _ZN4node5StartEiPPc + 583
+12  node                                0x0000000100001834 start + 52
+13  ???                                 0x0000000000000002 0x0 + 2

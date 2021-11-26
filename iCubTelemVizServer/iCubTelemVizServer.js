@@ -2,6 +2,10 @@
  * Server http (non secure)
  */
 
+// DEBUG
+const SegfaultHandler = require('segfault-handler');
+SegfaultHandler.registerHandler('crash.log');
+
 // Import main configuration
 var config = require('../config/processedDefault');
 
